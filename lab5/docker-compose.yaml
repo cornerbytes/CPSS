@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  server:
+    hostname: mqtt_broker
+    image: debian:bookworm
+    container_name: mqtt_broker
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.7.11
+    command: >
+      bash -c "
+        apt-get update && apt-get install -y mosquitto &&
+        sleep infinity
+      "
+    ports:
+      - "1883:1883" 
+    volumes:
+      - ./mosquitto.conf:/mosquitto.conf:rw 
+
+  client:
+    hostname: mqtt_client
+    image: debian:bookworm
+    container_name: mqtt_client
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.7.12
+    command: >
+      bash -c "
+        apt-get update && apt-get install -y mosquitto-clients &&
+        sleep infinity
+      "
+
+networks:
+  mqtt_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.7.0/24"
+          gateway: "192.168.7.1"
