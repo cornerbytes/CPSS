@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  mqtt-app:
+    container_name: mqtt_app
+    image: node:18-alpine
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    command: sh -c "tail -f /dev/null"
