@@ -25,20 +25,21 @@ server.listen(1883, () => {
 
 aedes.on("publish", (packet, client) => {
   const message = packet.payload.toString();
-  console.log("Received message:", message);
 
-  if (message.slice(0, 1) !== "{" && message.slice(0, 4) !== "mqtt") {
-    const dbStat = "INSERT INTO mqttjs SET ?";
-    const data = {
-      message: message,
-    };
+  if (client) {
+    if (message.slice(0, 1) !== "{" && message.slice(0, 4) !== "mqtt") {
+      const dbStat = "INSERT INTO mqttjs SET ?";
+      const data = { message };
 
-    db.query(dbStat, data, (error, results) => {
-      if (error) {
-        console.log("Error saving data to database:", error);
-      } else {
-        console.log("Data saved to database!");
-      }
-    });
+      db.query(dbStat, data, (error, results) => {
+        if (error) {
+          console.log("Error saving data to database:", error);
+        } else {
+          console.log("Data saved to database!");
+        }
+      });
+    }
+  } else {
+    console.log("Broker published message (ignored for DB):", message);
   }
 });

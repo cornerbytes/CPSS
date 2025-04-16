@@ -11,6 +11,13 @@ server.listen(port, () => {
 
 aedes.on('publish', (packet, client) => {
   const message = packet.payload.toString();
-  console.log('Received message:', message);
+  if (client) {
+    console.log(`Client ${client.id} Published message: ${message}`);
+  } else {
+    console.log(`Broker published message: ${message}`);
+  }
+});
+aedes.on('client', (client) => {
+  console.log(`Client connected: ${client.id}`);
 });
 
