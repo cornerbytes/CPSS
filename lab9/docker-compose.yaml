@@ -9,6 +9,7 @@ services:
       - .:/usr/src/app
     ports:
       - "3000:3000"
+      - "1883:1883"
     command: sh -c "tail -f /dev/null"
     depends_on:
       - mysql
