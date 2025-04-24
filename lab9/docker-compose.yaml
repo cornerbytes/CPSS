@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  mqtt-app:
+    container_name: mqtt_app
+    image: node:18-alpine
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: sh -c "tail -f /dev/null"
+    depends_on:
+      - mysql
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.2
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
